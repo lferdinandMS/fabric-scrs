@@ -1,0 +1,10 @@
+# Python dependencies for the Fabric SCR workflow.
+#   pyyaml   — validate/parse the SCR config + data YAML files
+#   openpyxl — read the staffing-plan .xlsx during staffing analysis
+#
+# Setup (Windows / PowerShell):
+#   python -m venv .venv
+#   .\.venv\Scripts\Activate.ps1
+#   pip install -r requirements.txt
+pyyaml>=6.0
+openpyxl>=3.1

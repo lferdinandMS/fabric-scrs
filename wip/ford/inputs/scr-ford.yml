@@ -1,0 +1,59 @@
+# Fabric SCR — per-deal configuration
+#
+# This file supplies ONLY the deterministic, config-sourced facts. The agent
+# combines three tiers of input to build the SCR:
+#
+#   1. CONFIG-SOURCED     (this file)      → Opportunity Overview, Pre-Conditions
+#   2. DOCUMENT-EXTRACTED (the SOW .docx)  → Project Overview, SCR Risk Types,
+#                                            workloads — via a thorough review
+#   3. SYNTHESIZED        (agent-generated)→ Review Summary, Key Points,
+#                                            Key Risk Factors
+#
+# Do NOT put workloads / risk narrative here — those are extracted from the SOW.
+
+# --- Document identity (drives the output filename) ---
+customer: "Ford Motor Company"          # used in filename + H1
+customer_short: "Ford"                  # used in filename: Fabric-SCR-<customer_short>-<date>
+engagement_name: "Agentic AI Transformation"
+date: "2026-06-06"                       # review date; filename uses YYYYMMDD
+
+# --- Source inputs (the document-extracted tier reads these) ---
+inputs:
+  sow_docx: "wip/inputs/DRAFT_NOT BINDING_Statement of Work_Ford_Agentic Al Transformation_v4_June 03, 2026 - Copy.docx"
+  supporting:
+    - "wip/inputs/Ford - Staffing Plan - Agent Implementation - 05 18 2026 - PRE SRM - Copy.xlsx"
+    - "wip/inputs/FORD-FabricSCR-CompassScreenshot.png"
+
+# --- Opportunity overview (CONFIG-SOURCED) ---
+opportunity:
+  msx_id: "7-3FS2XQBWAO"                 # CRM / MSX Opportunity ID
+  crm_account_id: "11-22J0X"
+  tpid: "639534"
+  c1url: "https://compass.microsoft.com/opportunities/7-3FS2XQBWAO/639534"  # optional link to Compass One opportunity
+  compass_one:
+    deal_type: "ESWO"
+    deal_owner: "Phelicia Lee"
+    stage: "Contracting"
+    target_approval_date: "2026-06-17"
+    reviews_required: false
+
+# --- Team (CONFIG-SOURCED reviewer identities; agent merges SOW-prepared-by from the .docx) ---
+team:
+  pursuit_lead: "Snehal R / snep"
+  architect: "Francis Moigula / Francis.Moigula"   # ISD Solution Architect (override if known)
+  eag: "Lorrin Ferdinand/lferdinand"        # EAG reviewer running this SCR
+
+# --- Commercials / pre-conditions (CONFIG-SOURCED; drives the Yes/No Pre-Conditions) ---
+commercials:
+  deal_value_usd: 3908330.96
+  fabric_in_scope: true
+  production_pilot: true
+  sold_margin_pct: 29.24
+  duration: "5.9-month (26-week)"
+  engagement_dates: "2026-07-13 – 2027-01-08"
+  # The $10M threshold check is derived from deal_value_usd by the agent.
+
+# --- Output options ---
+output:
+  generate_docx: true                    # run pandoc to produce the styled .docx
+  reference_template: "templates/Fabric-SCRTemplate-20250605.docx"

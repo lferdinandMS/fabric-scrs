@@ -1,0 +1,16 @@
+# Python virtual environment
+.venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Word lock files (created when a .docx is open)
+~$*
+
+# pandoc media extraction output
+wip/output/media/
+
+# Generated Word docs — throwaway build output, always reproducible from the
+# *-scr.data.yml via pandoc. The .md render is the versioned artifact (kept).
+wip/output/*.docx

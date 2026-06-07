@@ -1,0 +1,171 @@
+# Fabric SCR — working DATA file (agent + human work product)
+#
+# This file is GENERATED and then REVIEWED. It is the single structured source
+# of truth for one SCR. The agent populates it across three tiers and the
+# human-in-the-loop reviews it FIELD BY FIELD before it is rendered.
+#
+#   Phase 1 (agent):  populate every field below from the input config + SOW +
+#                     authoritative sources, setting a `status` on each.
+#   Phase 2 (human):  review/edit field values, flip `status` to `human-edited`
+#                     or `approved`, resolve every `<< ... >>` and `unverified`.
+#   Phase 3 (render): the .md and .docx are generated FROM this file only.
+#
+# Lives in:  wip/output/<customer_short>-scr.data.yml
+# Generated from input: wip/inputs/<customer_short>.yml  (recorded in meta.source_config)
+#
+# status vocabulary (per extracted/synthesized field):
+#   extracted     – pulled from the SOW, not yet human-reviewed
+#   synthesized   – agent-written summary of other tiers, not yet reviewed
+#   verified      – checked against an authoritative source (see sources)
+#   unverified    – could not confirm against an authoritative source; needs human
+#   human-edited  – a person changed the value
+#   approved      – a person signed off as-is
+
+meta:
+  source_config: "wip/inputs/<< customer_short >>.yml"
+  generated_utc: "<< set by agent on populate >>"
+  schema: "scr-data/v1"
+  # Monotonic revision of THIS data file. Bump +1 each time the agent re-populates
+  # or a human edits and re-saves. Stamped into the rendered markdown footer so any
+  # printed/exported SCR is self-identifying without filename suffixes.
+  revision: 1
+
+# ============================================================
+# TIER 1 — CONFIG-SOURCED (copied verbatim from the input config)
+# ============================================================
+identity:
+  customer: ""
+  customer_short: ""
+  engagement_name: ""
+  date: ""
+
+opportunity:
+  msx_id: ""
+  crm_account_id: ""
+  tpid: ""
+  c1url: ""
+  compass_one:
+    deal_type: ""
+    deal_owner: ""
+    stage: ""
+    target_approval_date: ""
+    reviews_required: false
+
+commercials:
+  deal_value_usd: 0
+  fabric_in_scope: true
+  production_pilot: false
+  sold_margin_pct: 0
+  duration: ""
+  engagement_dates: ""
+
+# Derived Pre-Conditions (agent computes from commercials; bare Yes/No answers).
+pre_conditions:
+  fabric_and_prod_under_10m:
+    answer: "<< Yes|No >>"     # Yes if fabric_in_scope AND deal_value_usd < 10,000,000
+    note: ""                    # short parenthetical only
+  fabric_10m_or_above_triggers_scr:
+    answer: "<< Yes|No >>"     # Yes only if deal_value_usd >= 10,000,000
+    note: ""
+
+# ============================================================
+# TIER 2 — DOCUMENT-EXTRACTED (thorough review of the SOW .docx)
+# ============================================================
+project_overview:
+  status: extracted
+  team_involved: |
+    << Pursuit lead, who prepared the SOW, ISD/EAG workstreams — from the SOW. >>
+  architect: "<< Confirm name / alias >>"     # from input config if provided
+  eag: ""                                       # from input config
+
+workloads:
+  status: extracted
+  items:
+    - "<< Workload 1 — from the SOW Technical Scope >>"
+
+# Staffing-plan analysis — reads inputs.supporting staffing plan (.xlsx).
+# Confirms data-engineering resources are present in the numbers needed to
+# deliver the projected outcomes/workloads above.
+staffing:
+  status: extracted
+  source: "<< inputs.supporting staffing-plan file name >>"
+  roles:                         # one row per role from the staffing plan
+    - role: "<< e.g. Data Engineer >>"
+      count: 0                   # headcount or FTE
+      allocation: "<< % / weeks >>"
+  data_engineering:
+    adequate: "<< Yes|No|Borderline >>"   # judgement vs projected workloads
+    assessment: |
+      << Are data-engineering resources present in the right numbers to fulfil
+         the projected outcomes/workloads? Note any gap or over/under-staffing. >>
+
+# SCR Risk Type: Fabric — each risk carries its own status + source citations.
+risk:
+  slas:
+    status: extracted
+    value: |
+      << Any Microsoft SLAs/OLAs? Exclusions; any customer-side SLAs in scope. >>
+    sources: []
+  cloud_integration:
+    status: extracted
+    value: |
+      << Integrations + native-connector availability. >>
+    sources: []
+  workloads_summary:
+    status: extracted
+    value: |
+      << One-paragraph summary of workloads + scope (agents / use cases). >>
+    sources: []
+  isvs:
+    status: extracted
+    value: |
+      << Which ISVs / partners and why (e.g., KPMG, Anthropic, ServiceNow). >>
+    sources: []
+  non_ga:
+    status: unverified
+    value: |
+      << Non-GA / preview product dependencies and recommendation. >>
+    sources: []
+
+# ============================================================
+# TIER 3 — SYNTHESIZED (agent summary of Tiers 1 + 2)
+# ============================================================
+review_summary:
+  status: synthesized
+  value: |
+    << 1–2 paragraph overall risk assessment. >>
+
+key_points:
+  status: synthesized
+  items:
+    # Boilerplate — keep and complete; reflects the staffing.data_engineering check.
+    - "The staffing plan was reviewed to confirm data-engineering resources are allocated in the numbers required to deliver the projected Fabric workloads and outcomes (<< adequate: Yes/No/Borderline — summary >>)."
+    - "<< Bullet 2 >>"
+
+key_risk_factors:
+  status: synthesized
+  items:
+    # Include any risk emerging from the staffing analysis (e.g. insufficient
+    # data-engineering coverage for the projected workloads). Omit if none.
+    - "<< Risk 1 — include staffing/data-engineering shortfalls if staffing.data_engineering.adequate is No/Borderline >>"
+
+# ============================================================
+# REFERENCES — authoritative sources cited by [n] in risk fields
+# ============================================================
+references:
+  - id: 1
+    title: "<< Microsoft Learn page title >>"
+    url: "<< https://learn.microsoft.com/... >>"
+    accessed: "<< YYYY-MM-DD >>"
+
+# ============================================================
+# OUTPUT — render options (copied from the input config)
+# ============================================================
+output:
+  generate_docx: true
+  reference_template: "templates/Fabric-SCRTemplate-20250605.docx"
+  # Render provenance — set by the agent during Phase 3 (render). The markdown is the
+  # versioned artifact (committed); the .docx is a throwaway build output (git-ignored,
+  # always reproducible from this data file via pandoc).
+  rendered_utc: "<< set by agent on render >>"
+  rendered_from_revision: "<< meta.revision at render time >>"
