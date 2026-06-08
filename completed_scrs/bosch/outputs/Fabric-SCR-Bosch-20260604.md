@@ -65,8 +65,8 @@
 
 > 1. Foundry Models sold by Azure (Azure OpenAI GA model list, audio models, fine-tuning models) — https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure (accessed 2026-06-07)
 > 2. Azure OpenAI in Microsoft Foundry — overview — https://learn.microsoft.com/en-us/azure/ai-services/openai/overview (accessed 2026-06-07)
-> 3. Statement of Work — Robert Bosch LLC, In-Car Voice Assistant, v1, June 04 2026 (DRAFT NOT BINDING) — wip/bosch/inputs/Statement of Work_Robert Bosch LLC_In Car Voice Assistant_v1_June 04, 2026_DRAFT.docx (accessed 2026-06-07)
-> 4. Enterprise Services Work Order — Robert Bosch LLC (Work Order UCM0265-499493-645827) — wip/bosch/inputs/Enterprise Services Work Order for Robert Bosch LLC.docx (accessed 2026-06-07)
+> 3. Statement of Work — Robert Bosch LLC, In-Car Voice Assistant, v1, June 04 2026 (DRAFT NOT BINDING) — completed_scrs/bosch/inputs/Statement of Work_Robert Bosch LLC_In Car Voice Assistant_v1_June 04, 2026_DRAFT.docx (accessed 2026-06-07)
+> 4. Enterprise Services Work Order — Robert Bosch LLC (Work Order UCM0265-499493-645827) — completed_scrs/bosch/inputs/Enterprise Services Work Order for Robert Bosch LLC.docx (accessed 2026-06-07)
 
 ---
-*Revision `1` · generated `2026-06-07T17:30:00Z` · rendered `2026-06-08T00:00:00Z` from `wip/bosch/outputs/Bosch-scr.data.yml`.*
+*Revision `1` · generated `2026-06-07T17:30:00Z` · rendered `2026-06-08T00:00:00Z` from `completed_scrs/bosch/outputs/Bosch-scr.data.yml`.*

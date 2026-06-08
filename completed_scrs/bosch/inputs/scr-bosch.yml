@@ -12,9 +12,9 @@ date: "<< YYYY-MM-DD >>"                    # review / approval date
 
 # --- Source inputs ---
 inputs:
-  sow_docx: "wip/bosch/inputs/<< Statement of Work .docx >>"
+  sow_docx: "completed_scrs/bosch/inputs/<< Statement of Work .docx >>"
   supporting:
-    - "wip/bosch/inputs/<< Staffing plan .xlsx >>"
+    - "completed_scrs/bosch/inputs/<< Staffing plan .xlsx >>"
     # Add CompassOne screenshot, etc. as needed
 
 # --- Opportunity overview ---

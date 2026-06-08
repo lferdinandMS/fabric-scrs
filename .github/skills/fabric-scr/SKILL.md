@@ -186,6 +186,17 @@ In the data file set `output.rendered_utc` (now, UTC ISO-8601) and
 file is re-populated or human-edited before a re-render; the `.md` is the committed artifact
 and the `.docx` is git-ignored (reproducible via pandoc).
 
+---
+
+## PHASE 4 — Finalize (archive a completed deal)
+
+When the deal is done/approved and the user asks to finalize/complete/archive it, run the
+**fabric-scr-finalize** skill (`.github/skills/fabric-scr-finalize/SKILL.md`). It moves
+`wip/<customer_short>/` → `completed_scrs/<customer_short>/` (preserving git history via
+`git mv`), rewrites internal `wip/<customer_short>` path references to
+`completed_scrs/<customer_short>`, and re-validates the YAML. It does not re-render and does
+not commit/push unless asked.
+
 ## Guardrails
 - Do NOT strip template encryption automatically — that is a rights/policy decision.
 - Do NOT overwrite `human-edited` / `approved` data-file fields, or any existing render output,

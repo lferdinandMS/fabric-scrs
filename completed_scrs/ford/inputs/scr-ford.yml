@@ -19,10 +19,10 @@ date: "2026-06-06"                       # review date; filename uses YYYYMMDD
 
 # --- Source inputs (the document-extracted tier reads these) ---
 inputs:
-  sow_docx: "wip/ford/inputs/DRAFT_NOT BINDING_Statement of Work_Ford_Agentic Al Transformation_v4_June 03, 2026 - Copy.docx"
+  sow_docx: "completed_scrs/ford/inputs/DRAFT_NOT BINDING_Statement of Work_Ford_Agentic Al Transformation_v4_June 03, 2026 - Copy.docx"
   supporting:
-    - "wip/ford/inputs/Ford - Staffing Plan - Agent Implementation - 05 18 2026 - PRE SRM - Copy.xlsx"
-    - "wip/ford/inputs/FORD-FabricSCR-CompassScreenshot.png"
+    - "completed_scrs/ford/inputs/Ford - Staffing Plan - Agent Implementation - 05 18 2026 - PRE SRM - Copy.xlsx"
+    - "completed_scrs/ford/inputs/FORD-FabricSCR-CompassScreenshot.png"
 
 # --- Opportunity overview (CONFIG-SOURCED) ---
 opportunity:
