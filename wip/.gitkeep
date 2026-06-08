@@ -1,0 +1,3 @@
+# This file keeps the wip/ directory present in git even when no deals are
+# in flight. Active SCR deals live in wip/<customer_short>/; finalize moves a
+# completed deal to completed_scrs/<customer_short>/ but never removes wip/.
