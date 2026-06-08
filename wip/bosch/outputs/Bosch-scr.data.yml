@@ -325,5 +325,5 @@ references:
 output:
   generate_docx: true
   reference_template: "templates/Fabric-SCRTemplate-20250605.docx"
-  rendered_utc: "<< set by agent on render >>"
-  rendered_from_revision: "<< meta.revision at render time >>"
+  rendered_utc: "2026-06-08T00:00:00Z"
+  rendered_from_revision: 1
