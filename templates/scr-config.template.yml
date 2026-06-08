@@ -1,6 +1,7 @@
 # Fabric SCR — per-deal configuration
 #
-# Copy this to wip/inputs/<deal>.yml, fill it in, and point the Fabric SCR agent at it.
+# Copy this to wip/<customer_short>/inputs/scr-<customer_short>.yml, fill it in, and point the
+# Fabric SCR agent at it.
 #
 # This file supplies ONLY the deterministic, config-sourced facts. The agent
 # combines three tiers of input to build the SCR:
@@ -21,9 +22,9 @@ date: "<< YYYY-MM-DD >>"                    # review date; filename uses YYYYMMD
 
 # --- Source inputs (the document-extracted tier reads these) ---
 inputs:
-  sow_docx: "wip/inputs/<< Statement of Work .docx >>"
+  sow_docx: "wip/<< customer_short >>/inputs/<< Statement of Work .docx >>"
   supporting:
-    - "wip/inputs/<< Staffing plan .xlsx, CompassOne screenshot, etc. >>"
+    - "wip/<< customer_short >>/inputs/<< Staffing plan .xlsx, CompassOne screenshot, etc. >>"
 
 # --- Opportunity overview (CONFIG-SOURCED) ---
 opportunity:

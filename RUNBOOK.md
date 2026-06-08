@@ -9,8 +9,11 @@ once per qualifying opportunity.
 | Folder | Purpose |
 |----|----|
 | `templates/` | The Word styling template (`Fabric-SCRTemplate-<date>.docx`). Used as the pandoc `--reference-doc` so output inherits Microsoft house styles (fonts, headings, table styles, margins). |
-| `wip/inputs/` | Source material for the deal under review — Statement of Work (SOW), staffing plan, CompassOne screenshots, etc. |
-| `wip/output/` | Generated artifacts per deal: the working `.md` and the final `.docx`. |
+| `wip/<customer_short>/inputs/` | Source material for the deal under review — Statement of Work (SOW), staffing plan, CompassOne screenshots, etc. |
+| `wip/<customer_short>/outputs/` | Generated artifacts for that deal: the data file, the working `.md`, and the final `.docx`. |
+
+Each deal is **self-contained** under `wip/<customer_short>/` — inputs and outputs both live in
+the customer's own folder. There is no shared, non-customer-specific output folder.
 
 **Naming convention:** `Fabric-SCR-<Customer>-<YYYYMMDD>` for both the `.md` and `.docx`
 (e.g. `Fabric-SCR-Ford-20260606`).
@@ -31,9 +34,9 @@ stay cleanly separated:
 
 | File | Role | Who writes it |
 |----|----|----|
-| `wip/inputs/<short>.yml` | **Input config** — deterministic deal facts + pointers to the SOW. Pristine; the agent never overwrites it. Schema: [templates/scr-config.template.yml](templates/scr-config.template.yml). | Human |
-| `wip/output/<short>-scr.data.yml` | **Data work product** — the structured SCR holding all three data tiers with **per-field provenance** (`status` + `sources`). This is the single source of truth and the human review surface. Schema: [templates/scr-data.template.yml](templates/scr-data.template.yml). | Agent populates → human reviews |
-| `wip/output/Fabric-SCR-<short>-<YYYYMMDD>.md` / `.docx` | **Render targets** — generated FROM the approved data file only. | Agent (render phase) |
+| `wip/<customer_short>/inputs/scr-<short>.yml` | **Input config** — deterministic deal facts + pointers to the SOW. Pristine; the agent never overwrites it. Schema: [templates/scr-config.template.yml](templates/scr-config.template.yml). | Human |
+| `wip/<customer_short>/outputs/<short>-scr.data.yml` | **Data work product** — the structured SCR holding all three data tiers with **per-field provenance** (`status` + `sources`). This is the single source of truth and the human review surface. Schema: [templates/scr-data.template.yml](templates/scr-data.template.yml). | Agent populates → human reviews |
+| `wip/<customer_short>/outputs/Fabric-SCR-<short>-<YYYYMMDD>.md` / `.docx` | **Render targets** — generated FROM the approved data file only. | Agent (render phase) |
 
 **Three data tiers** (every section maps to exactly one):
 
@@ -99,16 +102,16 @@ $f = 'templates/Fabric-SCRTemplate-20250605.docx'
 If you are reviewing/editing an existing SCR `.docx`, convert it to markdown first:
 
 ```powershell
-pandoc "wip/output/<file>.docx" -f docx -t gfm --wrap=none `
-  --extract-media="wip/output/media" -o "wip/output/<file>.md"
+pandoc "wip/<customer_short>/outputs/<file>.docx" -f docx -t gfm --wrap=none `
+  --extract-media="wip/<customer_short>/outputs/media" -o "wip/<customer_short>/outputs/<file>.md"
 ```
 
-- `--extract-media` pulls any embedded images into `wip/output/media/`.
+- `--extract-media` pulls any embedded images into `wip/<customer_short>/outputs/media/`.
 - If there are no images, no media folder is created.
 
 ## Step 2 — Edit the markdown
 
-Edit `wip/output/<file>.md` as the single source of truth for content.
+Edit `wip/<customer_short>/outputs/<file>.md` as the single source of truth for content.
 
 ### Critical: tables with bullet lists
 
@@ -131,9 +134,9 @@ bullet glyph formatting changes).
 ## Step 3 — Generate the final styled Word document
 
 ```powershell
-pandoc "wip/output/<file>.md" -f gfm -t docx `
+pandoc "wip/<customer_short>/outputs/<file>.md" -f gfm -t docx `
   --reference-doc="templates/Fabric-SCRTemplate-20250605.docx" `
-  -o "wip/output/<file>.docx"
+  -o "wip/<customer_short>/outputs/<file>.docx"
 ```
 
 `--reference-doc` applies the template's **styles only** (fonts, heading and table
@@ -145,7 +148,7 @@ the document body comes entirely from your markdown.
 Spot-check that key sections and the (formerly HTML) table survived:
 
 ```powershell
-pandoc "wip/output/<file>.docx" -f docx -t plain --wrap=none |
+pandoc "wip/<customer_short>/outputs/<file>.docx" -f docx -t plain --wrap=none |
   Select-String -Pattern "SCR Risk Type|Review Summary|Key Risk Factors"
 ```
 
@@ -156,7 +159,7 @@ Then open the `.docx` in Word to confirm styling and table rendering.
 | Task | Command |
 |----|----|
 | Check template encryption | `([System.IO.File]::ReadAllBytes('templates\Fabric-SCRTemplate-20250605.docx')[0..3] | %{ $_.ToString('X2') }) -join ' '` |
-| docx → markdown | `pandoc in.docx -f docx -t gfm --wrap=none --extract-media=wip/output/media -o out.md` |
+| docx → markdown | `pandoc in.docx -f docx -t gfm --wrap=none --extract-media=wip/<customer_short>/outputs/media -o out.md` |
 | markdown → styled docx | `pandoc out.md -f gfm -t docx --reference-doc=templates/Fabric-SCRTemplate-20250605.docx -o out.docx` |
 | Verify docx text | `pandoc out.docx -f docx -t plain --wrap=none | Select-String "<pattern>"` |
 

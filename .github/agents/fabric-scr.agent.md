@@ -15,11 +15,14 @@ Input schema: [templates/scr-config.template.yml](../../templates/scr-config.tem
 Data-file schema: [templates/scr-data.template.yml](../../templates/scr-data.template.yml).
 
 ## Three files, three roles
+Every deal is self-contained under `wip/<customer_short>/`. There is **no** shared
+non-customer output folder — inputs and outputs both live under the customer's own folder.
+
 | File | Role |
 |----|----|
 | `wip/<customer_short>/inputs/scr-<short>.yml` | **Input config** — facts + SOW pointers. Pristine; never overwrite. |
-| `wip/output/<short>-scr.data.yml` | **Data work product** — all three tiers + per-field provenance. The human review surface and single source of truth. |
-| `wip/output/Fabric-SCR-<short>-<YYYYMMDD>.md` / `.docx` | **Render targets** — generated FROM the data file only. |
+| `wip/<customer_short>/outputs/<short>-scr.data.yml` | **Data work product** — all three tiers + per-field provenance. The human review surface and single source of truth. |
+| `wip/<customer_short>/outputs/Fabric-SCR-<short>-<YYYYMMDD>.md` / `.docx` | **Render targets** — generated FROM the data file only. |
 
 ## Data-flow model (every section is one tier)
 1. **Config-sourced** → Opportunity Overview, Pre-Conditions (from the input config).
@@ -39,7 +42,7 @@ Decide intent from the user prompt:
 
 ### Phase 0 — Initialize a new deal workspace
 Delegate to the **fabric-scr-init** skill (`.github/skills/fabric-scr-init/SKILL.md`). That skill:
-1. Creates `wip/<customer_short>/inputs/` from `templates/scr-config.template.yml`.
+1. Creates `wip/<customer_short>/inputs/` and `wip/<customer_short>/outputs/` from `templates/scr-config.template.yml`.
 2. Pre-fills `customer`, `customer_short`, `engagement_name`, and input paths; leaves business fields as `<< ... >>`.
 3. Reports what the human must drop in before Phase 1 can run.
 
@@ -47,7 +50,7 @@ Delegate to the **fabric-scr-init** skill (`.github/skills/fabric-scr-init/SKILL
 1. **Locate the input config.** If no path given, look in `wip/<customer_short>/inputs/` or `wip/` subdirectories for a `scr-*.yml`. Read it.
    Validate `customer`, `customer_short`, `date`, `commercials.deal_value_usd`, `inputs.sow_docx`;
    if any are missing, list them and stop.
-2. **Open/create the data file** at `wip/output/<short>-scr.data.yml` from
+2. **Open/create the data file** at `wip/<customer_short>/outputs/<short>-scr.data.yml` from
    `templates/scr-data.template.yml`. If it exists, refresh only fields still
    `extracted`/`synthesized`/`unverified` — never overwrite `human-edited`/`approved` without
    confirmation.
@@ -75,7 +78,7 @@ Delegate to the **fabric-scr-init** skill (`.github/skills/fabric-scr-init/SKILL
 
 ### Phase 3 — Render from the approved data file
 10. **Read the data file ONLY** (do not re-read the SOW). Scaffold
-    `wip/output/Fabric-SCR-<short>-<YYYYMMDD>.md` in template section order, emitting inline
+    `wip/<customer_short>/outputs/Fabric-SCR-<short>-<YYYYMMDD>.md` in template section order, emitting inline
     `[n]` citations that match `references`. **Render only sections the template has** —
     `workloads` and `staffing` are analysis inputs (they feed the SCR Risk Type "workloads"
     row and the synthesized Review Summary / Key Points / Key Risk Factors); do NOT emit
@@ -111,7 +114,9 @@ Delegate to the **fabric-scr-init** skill (`.github/skills/fabric-scr-init/SKILL
 - DO NOT overwrite `human-edited`/`approved` data fields or existing render output without
   explicit confirmation.
 - The render phase injects NO new facts — it reads the data file only.
-- ONLY produce SCR artifacts under `wip/output/`.
+- ONLY produce SCR artifacts under the deal's own `wip/<customer_short>/outputs/` folder. Never
+  write to a shared `wip/output/`, and never write one customer's artifacts into another
+  customer's folder.
 
 ## Output format
 End with: the path(s) created/updated, the derived Pre-Conditions Yes/No, the count of cited

@@ -61,8 +61,8 @@
 > 1. What's new in Microsoft Fabric (GA features: OneLake, Eventstream connectors, Data Factory CDC) — https://learn.microsoft.com/en-us/fabric/fundamentals/whats-new (accessed 2026-06-06)
 > 2. Reliability in Microsoft Fabric (availability zones; cross-region DR for OneLake) — https://learn.microsoft.com/en-us/azure/reliability/reliability-fabric (accessed 2026-06-06)
 > 3. Foundry Models sold by Azure (Azure OpenAI GPT-5 family; Azure-billed, Azure-SLA-covered) — https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure (accessed 2026-06-06)
-> 4. Ford – Agentic AI Transformation SOW (DRAFT v4, 2026-06-03), Exclusions: Guarantees and SLAs/OLAs — wip/inputs/DRAFT_NOT BINDING_Statement of Work_Ford_Agentic Al Transformation_v4_June 03, 2026 - Copy.docx (accessed 2026-06-06)
+> 4. Ford – Agentic AI Transformation SOW (DRAFT v4, 2026-06-03), Exclusions: Guarantees and SLAs/OLAs — wip/ford/inputs/DRAFT_NOT BINDING_Statement of Work_Ford_Agentic Al Transformation_v4_June 03, 2026 - Copy.docx (accessed 2026-06-06)
 > 5. Supported connectors in Microsoft Fabric Data Factory (Dataflow Gen2 / pipelines / Copy job — connector availability) — https://learn.microsoft.com/en-us/fabric/data-factory/connector-overview (accessed 2026-06-06)
 
 ---
-*Revision `12` · generated `2026-06-06T00:00:00Z` · rendered `2026-06-06T16:33:27Z` from `wip/output/Ford-scr.data.yml`.*
+*Revision `12` · generated `2026-06-06T00:00:00Z` · rendered `2026-06-06T16:33:27Z` from `wip/ford/outputs/Ford-scr.data.yml`.*

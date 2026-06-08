@@ -9,8 +9,8 @@ __pycache__/
 ~$*
 
 # pandoc media extraction output
-wip/output/media/
+wip/*/outputs/media/
 
 # Generated Word docs — throwaway build output, always reproducible from the
 # *-scr.data.yml via pandoc. The .md render is the versioned artifact (kept).
-wip/output/*.docx
+wip/*/outputs/*.docx

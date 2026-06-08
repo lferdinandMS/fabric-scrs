@@ -10,8 +10,8 @@
 #                     or `approved`, resolve every `<< ... >>` and `unverified`.
 #   Phase 3 (render): the .md and .docx are generated FROM this file only.
 #
-# Lives in:  wip/output/<customer_short>-scr.data.yml
-# Generated from input: wip/inputs/<customer_short>.yml  (recorded in meta.source_config)
+# Lives in:  wip/<customer_short>/outputs/<customer_short>-scr.data.yml
+# Generated from input: wip/<customer_short>/inputs/scr-<customer_short>.yml  (recorded in meta.source_config)
 #
 # status vocabulary (per extracted/synthesized field):
 #   extracted     – pulled from the SOW, not yet human-reviewed
@@ -22,7 +22,7 @@
 #   approved      – a person signed off as-is
 
 meta:
-  source_config: "wip/inputs/<< customer_short >>.yml"
+  source_config: "wip/<< customer_short >>/inputs/scr-<< customer_short >>.yml"
   generated_utc: "<< set by agent on populate >>"
   schema: "scr-data/v1"
   # Monotonic revision of THIS data file. Bump +1 each time the agent re-populates

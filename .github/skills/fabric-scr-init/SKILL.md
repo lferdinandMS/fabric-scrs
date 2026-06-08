@@ -1,6 +1,6 @@
 ---
 name: fabric-scr-init
-description: "Initialize a new Fabric SCR deal workspace. USE WHEN: starting a new Fabric SCR for a customer who does not yet have a wip/<customer>/ folder structure. Creates the deal folder, input config, and output placeholder, then instructs the human on what to drop in. Triggers on 'init scr', 'new scr', 'create scr workspace', 'scaffold bosch scr', or any request to set up a new deal for the SCR workflow."
+description: "Initialize a new Fabric SCR deal workspace. USE WHEN: starting a new Fabric SCR for a customer who does not yet have a wip/<customer>/ folder structure. Creates the deal folder, input config, and outputs folder, then instructs the human on what to drop in. Triggers on 'init scr', 'new scr', 'create scr workspace', 'scaffold bosch scr', or any request to set up a new deal for the SCR workflow."
 ---
 
 # Fabric SCR — Initialize deal workspace (Phase 0)
@@ -26,9 +26,11 @@ Collect the following (from the user prompt or, if missing, ask before proceedin
 wip/
   <customer_short>/
     inputs/           ← human drops SOW + staffing plan here
+    outputs/          ← agent writes the data file + rendered .md/.docx here
 ```
 
-Create `wip/<customer_short>/inputs/` (and `wip/<customer_short>/` if needed).
+Create `wip/<customer_short>/inputs/` and `wip/<customer_short>/outputs/` (and
+`wip/<customer_short>/` if needed).
 
 ### 0c. Scaffold the input config
 Copy `templates/scr-config.template.yml` to
@@ -61,4 +63,5 @@ Report:
 ## Constraints
 - Do NOT populate the data file or read a SOW as part of init — this phase is scaffolding only.
 - Do NOT invent MSX IDs, deal values, or team names — leave `<< ... >>` placeholders.
-- The output folder (`wip/output/`) is shared; per-customer inputs live under `wip/<customer_short>/inputs/`.
+- Each deal is self-contained: inputs live under `wip/<customer_short>/inputs/` and all generated
+  outputs under `wip/<customer_short>/outputs/`. There is NO shared, non-customer output folder.

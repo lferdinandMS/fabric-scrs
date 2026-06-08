@@ -1,6 +1,6 @@
 ---
 name: fabric-scr
-description: "Generate a Fabric Special Conditions Review (SCR) document from a per-deal YAML config. USE WHEN: creating a new Fabric SCR, populating the SCR data file from a SOW, scaffolding an SCR document in wip/output, converting an SCR markdown to a styled Word docx, or running the SCR pandoc workflow. Two-phase: populate a reviewable data file, then render markdown + docx with GFM table flattening and the SCR template."
+description: "Generate a Fabric Special Conditions Review (SCR) document from a per-deal YAML config. USE WHEN: creating a new Fabric SCR, populating the SCR data file from a SOW, scaffolding an SCR document under wip/<customer_short>/outputs, converting an SCR markdown to a styled Word docx, or running the SCR pandoc workflow. Two-phase: populate a reviewable data file, then render markdown + docx with GFM table flattening and the SCR template."
 ---
 
 # Fabric SCR Skill
@@ -11,11 +11,14 @@ from a per-deal config plus the deal's Statement of Work (SOW). Full reference:
 
 ## Three files, three roles
 
+Every deal is self-contained under `wip/<customer_short>/` — inputs and outputs both live in
+the customer's own folder. There is **no** shared, non-customer-specific output folder.
+
 | File | Role | Who writes it |
 |----|----|----|
 | `wip/<customer_short>/inputs/scr-<short>.yml` | **Input config** — deterministic facts + pointers to the SOW. Pristine; never overwritten. | Human |
-| `wip/output/<short>-scr.data.yml` | **Data work product** — the structured SCR with all three tiers + per-field provenance. The single source of truth and the human review surface. | Agent populates, human reviews |
-| `wip/output/Fabric-SCR-<short>-<YYYYMMDD>.md` / `.docx` | **Render targets** — generated FROM the data file. | Agent (render) |
+| `wip/<customer_short>/outputs/<short>-scr.data.yml` | **Data work product** — the structured SCR with all three tiers + per-field provenance. The single source of truth and the human review surface. | Agent populates, human reviews |
+| `wip/<customer_short>/outputs/Fabric-SCR-<short>-<YYYYMMDD>.md` / `.docx` | **Render targets** — generated FROM the data file. | Agent (render) |
 
 Data-file schema: [templates/scr-data.template.yml](../../../templates/scr-data.template.yml).
 Input schema: [templates/scr-config.template.yml](../../../templates/scr-config.template.yml).
@@ -47,13 +50,13 @@ the starter config before proceeding to Phase 1.
 - Load `wip/<customer_short>/inputs/scr-<short>.yml`.
 - Confirm required fields: `customer`, `customer_short`, `date`, `commercials.deal_value_usd`,
   `inputs.sow_docx`.
-- Data-file path = `wip/output/<customer_short>-scr.data.yml`. If it already exists, do NOT
+- Data-file path = `wip/<customer_short>/outputs/<customer_short>-scr.data.yml`. If it already exists, do NOT
   clobber — load it and refresh only fields whose `status` is still `extracted`/`synthesized`/
   `unverified` (never overwrite `human-edited` or `approved` without confirmation).
 
 ### 2. Convert the SOW for review
 ```powershell
-pandoc "<inputs.sow_docx>" -f docx -t gfm --wrap=none -o "wip/output/_sow-<short>.md"
+pandoc "<inputs.sow_docx>" -f docx -t gfm --wrap=none -o "wip/<customer_short>/outputs/_sow-<short>.md"
 ```
 Read the whole converted SOW before extracting — do not skim.
 
@@ -116,7 +119,7 @@ fields, or proceed to render when satisfied.
 ## PHASE 3 — Render markdown + Word from the data file
 
 ### 6. Scaffold the markdown
-Render `wip/output/Fabric-SCR-<short>-<YYYYMMDD>.md` from the data file ONLY (do not re-read
+Render `wip/<customer_short>/outputs/Fabric-SCR-<short>-<YYYYMMDD>.md` from the data file ONLY (do not re-read
 the SOW). Section order (must mirror the SCR template — no extra sections):
 Opportunity Overview → Project Overview → Team Involved → Pre-Conditions →
 Special Conditions Review Criteria (SCR Risk Type) → Review Summary → Key Points Considered →
@@ -137,7 +140,7 @@ End the markdown with a self-identifying footer (so any printout/export is trace
 filename suffixes). The filename stays stable across revisions — git is the version history:
 ```markdown
 ---
-*Revision `<meta.revision>` · generated `<meta.generated_utc>` · rendered `<output.rendered_utc>` from `wip/output/<short>-scr.data.yml`.*
+*Revision `<meta.revision>` · generated `<meta.generated_utc>` · rendered `<output.rendered_utc>` from `wip/<customer_short>/outputs/<short>-scr.data.yml`.*
 ```
 
 **Indent body content one level under its heading.** Indentation is template-driven, not
@@ -165,14 +168,14 @@ hand-applied:
 Confirm the reference template is unencrypted (PK magic `50 4B 03 04`; if `D0 CF 11 E0` it is
 IRM-encrypted — stop and ask the user to unprotect it). Then:
 ```powershell
-pandoc "wip/output/<filename>.md" -f gfm -t docx `
+pandoc "wip/<customer_short>/outputs/<filename>.md" -f gfm -t docx `
   --reference-doc="<output.reference_template>" `
-  -o "wip/output/<filename>.docx"
+  -o "wip/<customer_short>/outputs/<filename>.docx"
 ```
 
 ### 9. Verify
 ```powershell
-pandoc "wip/output/<filename>.docx" -f docx -t plain --wrap=none |
+pandoc "wip/<customer_short>/outputs/<filename>.docx" -f docx -t plain --wrap=none |
   Select-String -Pattern "SCR Risk Type|Review Summary|Key Risk Factors|References"
 ```
 Report the created file paths and any remaining `<< ... >>` / `unverified` fields.
